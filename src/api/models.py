@@ -1,4 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+import datetime
+# from sqlalchemy import Date
 
 db = SQLAlchemy()
 
@@ -68,7 +70,7 @@ class User(db.Model):
     website_url = db.Column(db.String(80), nullable=True)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
-    establishments = db.relationship("Local", backref="User", lazy=True)
+    establishments = db.relationship("Establishment", backref="User", lazy=True)
     user_bands = db.relationship('UserBand', backref='User', lazy=True) 
     user_instrument = db.relationship("UserInstrument", backref="User", lazy=True)
     music_genre_user = db.relationship("MusicGenreUser", backref="User", lazy=True)
@@ -125,36 +127,6 @@ class Instrument(db.Model):
             "instrument_category_id": self.instrument_category_id,
         }
 
-class UserInstrument(db.Model): #intermedia
-    id = db.Column(db.Integer, primary_key=True)
-    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<UserInstrument {self.id}>'
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "instrument_id": self.instrument_id,
-            "user_id": self.user_id,
-        }
-
-
-class BandInstrument(db.Model): #intermedia
-    id = db.Column(db.Integer, primary_key=True)
-    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
-    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<BandInstrument {self.id}>'
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "instrument_id": self.instrument_id,
-            "band_id": self.band_id,
-        }
 
 
 class MusicGenre(db.Model):
@@ -199,27 +171,12 @@ class Band(db.Model):
 
 
 
-class UserBand(db.Model): #intermedia
-    id = db.Column(db.Integer, primary_key=True)
-    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f'<UserBand {self.id}>'
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "band_id": self.band_id,
-            "user_id": self.user_id,
-        }
-
 class Establishment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     establishment_profile_img = db.Column(db.String(255), nullable=True)
     establishment_portrait_img = db.Column(db.String(255), nullable=True)
     name = db.Column(db.String(80), nullable=False)
-    ubicacion_local = db.Column(db.String(255), nullable=False)
+    ubicacion = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(80), nullable=True)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -261,6 +218,52 @@ class Event(db.Model):
             "establishment_id": self.establishment_id,
         }
 
+class UserBand(db.Model): #intermedia
+    id = db.Column(db.Integer, primary_key=True)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<UserBand {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "band_id": self.band_id,
+            "user_id": self.user_id,
+        }
+
+
+class UserInstrument(db.Model): #intermedia
+    id = db.Column(db.Integer, primary_key=True)
+    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<UserInstrument {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "instrument_id": self.instrument_id,
+            "user_id": self.user_id,
+        }
+
+
+class BandInstrument(db.Model): #intermedia
+    id = db.Column(db.Integer, primary_key=True)
+    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<BandInstrument {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "instrument_id": self.instrument_id,
+            "band_id": self.band_id,
+        }
 
 class MusicGenreEstablishment(db.Model): #intermedia
     id = db.Column(db.Integer, primary_key=True)
