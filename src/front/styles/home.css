@@ -23,4 +23,18 @@
 
 .cardConcert{
     width: 25rem;
+    height: 20rem;
 }
+
+.imagCard{
+    height: 10rem;
+    /* box-sizing: content-box; */
+    object-fit: cover;
+    width: 100%;
+}
+
+/* .rowCards {
+    display: flex;
+    overflow: auto;
+    scroll-behavior: smooth;
+} */

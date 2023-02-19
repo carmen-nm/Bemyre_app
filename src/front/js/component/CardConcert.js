@@ -17,13 +17,13 @@ export const CardConcert = ({
   return (
     <>
       <div className="card cardConcert">
-      <img src={event_profile_img} className="card-img-top" alt="..."/>
+      <img src={event_profile_img} className="card-img-top imagCard" alt="..."/>
       <div className="card-body">
         <h5 className="card-title">{name} | {establishment_name}</h5>
         <p className="card-text">{description}</p>
-        <div>
-          {music_genre_event.map((element)=>{<span class="badge rounded-pill text-bg-light">{element.music_genre_id}</span>})}
-        </div>
+        {/* <div> */}
+          {music_genre_event.map((element)=>(<span className="badge rounded-pill text-bg-secondary">{element.music_genre_id}</span>))}
+        {/* </div> */}
       </div>
     </div>
     </>
