@@ -209,13 +209,18 @@ class Event(db.Model):
         return f'<Event {self.name}>'
 
     def serialize(self):
+        music_genre_event_list = []
+        for music_genre in self.music_genre_event:
+            music_genre_event_list.append(music_genre.serialize())
         return {
             "id": self.id,
-            "establishment_profile_img": self.establishment_profile_img,
-            "establishment_portrait_img": self.establishment_portrait_img,
+            "event_profile_img": self.event_profile_img,
+            "event_portrait_img": self.event_portrait_img,
             "name": self.name,
             "description": self.description,
             "establishment_id": self.establishment_id,
+            "music_genre_event": music_genre_event_list,
+            "establishment_name": Establishment.query.get(self.establishment_id).name
         }
 
 class UserBand(db.Model): #intermedia
