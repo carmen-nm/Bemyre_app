@@ -19,9 +19,8 @@ def handle_hello():
 
 @api.route('/events', methods=['GET'])
 def events():
-    
+     
     events = Event.query.all()
-
     print('hola', events)
     events_list = []
     print(events_list)
@@ -29,7 +28,7 @@ def events():
         print('1', event)
         events_list.append(event.serialize())
 
-        
+    
     return jsonify(events_list), 200
 
 

@@ -214,6 +214,10 @@ class Event(db.Model):
         for music_genre in self.music_genre_event:
             music_genre_event_list.append(music_genre.serialize())
 
+        city_id = Establishment.query.get(self.establishment_id).city_id
+        # print(city_id)
+        city = City.query.filter_by(id=city_id).first()
+        # print(city.serialize())
             
         return {
             "id": self.id,
@@ -224,9 +228,9 @@ class Event(db.Model):
             "establishment_id": self.establishment_id,
             "music_genre_event": music_genre_event_list,
             "date": self.date,
-            "establishment_name": Establishment.query.get(self.establishment_id).name,
-            # "city": Establishment.query.get(self.establishment_id).city_id,
-            # "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
+            "establishment_name": Establishment.query.get(self.establishment_id).name,            
+            "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
+            "city": city.name
         }
 
 class UserBand(db.Model): #intermedia
