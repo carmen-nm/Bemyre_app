@@ -48,8 +48,7 @@ class City(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "state_id": self.state_id,
-            # "locales": [locales.serialize() for local in self.locales]
+            "state_id": self.state_id,            
         }
         
 
@@ -203,15 +202,19 @@ class Event(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(80), nullable=True)
     establishment_id = db.Column(db.Integer, db.ForeignKey('establishment.id'), nullable=False)
+    date = db.Column(db.DateTime, nullable=True)
     music_genre_event = db.relationship("MusicGenreEvent", backref="Event", lazy=True)
     
     def __repr__(self):
         return f'<Event {self.name}>'
-
+ 
     def serialize(self):
+
         music_genre_event_list = []
         for music_genre in self.music_genre_event:
             music_genre_event_list.append(music_genre.serialize())
+
+            
         return {
             "id": self.id,
             "event_profile_img": self.event_profile_img,
@@ -220,7 +223,10 @@ class Event(db.Model):
             "description": self.description,
             "establishment_id": self.establishment_id,
             "music_genre_event": music_genre_event_list,
-            "establishment_name": Establishment.query.get(self.establishment_id).name
+            "date": self.date,
+            "establishment_name": Establishment.query.get(self.establishment_id).name,
+            # "city": Establishment.query.get(self.establishment_id).city_id,
+            # "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
         }
 
 class UserBand(db.Model): #intermedia
@@ -289,6 +295,7 @@ class MusicGenreEvent(db.Model): #intermedia
     id = db.Column(db.Integer, primary_key=True)
     music_genre_id = db.Column(db.Integer, db.ForeignKey('music_genre.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    # music_genre = db.relationship("MusicGenre", backref="MusicGenreEvent", lazy=True)
 
     def __repr__(self):
         return f'<MusicGenreEvent {self.id}>'
@@ -298,6 +305,8 @@ class MusicGenreEvent(db.Model): #intermedia
             "id": self.id,
             "music_genre_id": self.music_genre_id,
             "event_id": self.event_id,
+            # "music_genre_name": self.music_genre.name,
+            "music_genre_name": MusicGenre.query.get(self.music_genre_id).name
         }
 
 

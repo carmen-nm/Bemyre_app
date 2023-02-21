@@ -10,6 +10,9 @@ export const CardConcert = ({
   description,
   establishment_name,
   music_genre_event,
+  ubicacion,
+  city,
+  date,
 
 }) => {
   
@@ -21,11 +24,17 @@ export const CardConcert = ({
       <div className="card-body">
         <h5 className="card-title">{name} | {establishment_name}</h5>
         <p className="card-text">{description}</p>
-        {/* <div> */}
-          {music_genre_event.map((element)=>(<span className="badge rounded-pill text-bg-secondary">{element.music_genre_id}</span>))}
-        {/* </div> */}
+        <p className="card-text">{ubicacion} | {city}</p>
+        <p className="card-text">{date}</p>
+      </div>  
+      <div class="card-footer">
+          {music_genre_event.map((element)=>(<span className="badge rounded-pill bg-warning m-1">{element.music_genre_name}</span>))}
+        
+          {/* <span className="badge bg-warning">Light</span> */}
       </div>
     </div>
     </>
   );
 };
+
+

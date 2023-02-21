@@ -14,7 +14,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			concerts: []
+			events: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -48,9 +48,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//reset the global store
 				setStore({ demo: demo });
 			},
-			fetchConcerts: async () => {
+			fetchEvents: async () => {
 				
-				await fetch(`${process.env.BACKEND_URL}/api/concerts`, {
+				await fetch(`${process.env.BACKEND_URL}/api/events`, {
 				  method: "GET",
 				  headers: {
 					// Authorization: `Bearer ${getStore().token_local}`,
@@ -61,7 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return response.json();
 				  })
 				  .then((result) => {
-					setStore({ concerts: result });
+					setStore({ events: result });
 					
 				  });
 			  },

@@ -17,14 +17,27 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@api.route('/concerts', methods=['GET'])
-def concerts():
+@api.route('/events', methods=['GET'])
+def events():
     
-    concerts = Event.query.all()
-    print('hola', concerts)
-    concerts_list = []
-    print(concerts_list)
-    for concert in concerts:
-        print('1', concert)
-        concerts_list.append(concert.serialize())
-    return jsonify(concerts_list), 200
+    events = Event.query.all()
+
+    print('hola', events)
+    events_list = []
+    print(events_list)
+    for event in events:
+        print('1', event)
+        events_list.append(event.serialize())
+
+        
+    return jsonify(events_list), 200
+
+
+
+# @api.route('/<int:genre_id>/event/', methods=['GET'])
+# def musicGenre_event(genre_id):
+   
+#     events = MusicGenreEvent.query.filter_by(music_genre_id=genre_id).all()
+#     print(events)
+#     events = [event.serialize() for event in events]
+#     return jsonify(events), 200
