@@ -227,7 +227,7 @@ class Event(db.Model):
             "description": self.description,
             "establishment_id": self.establishment_id,
             "music_genre_event": music_genre_event_list,
-            "date": self.date,
+            "date": self.date.strftime("%m/%d/%Y, %H:%M"),
             "establishment_name": Establishment.query.get(self.establishment_id).name,            
             "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
             "city": city.name
