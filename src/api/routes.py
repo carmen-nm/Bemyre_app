@@ -22,21 +22,27 @@ def handle_hello():
 # RELLENADO DE TABLAS SIN JWT NI TOKEN
 @api.route('/country', methods=['POST'])
 def add_country():
-    data = request.json()
-    new_country = Country(
-        name = data["name"],        
-    )
-    db.session.add(new_country)
-    db.session.commit()
-    response_body = {
-        "msg": "country añadido"
-    }
-    return jsonify(response_body), 200
+    # data = request.json()
+    data = request.get_json(force=True)
+    try:
+        new_country = Country(
+            name = data["name"],        
+        )
+        db.session.add(new_country)
+        db.session.commit()
+        response_body = {
+            "msg": "country añadido"
+        }
+        return jsonify(response_body), 200
+    except Exception as error:
+        print('error?', error)
+        return jsonify({"message": str(error)}), 400
 
 
 @api.route('/state', methods=['POST'])
-def add_country():
-    data = request.json()
+def add_state():
+    # data = request.json()
+    data = request.get_json(force=True)
     new_state = State(
         name = data["name"],
         country_id = data["country_id"]    
@@ -51,17 +57,22 @@ def add_country():
 
 @api.route('/city', methods=['POST'])
 def add_city():
-    data = request.json()
-    new_city = City(
-        name = data["name"],
-        state_id = data["state_id"]    
-    )
-    db.session.add(new_city)
-    db.session.commit()
-    response_body = {
-        "msg": "city añadida"
-    }
-    return jsonify(response_body), 200
+    try:
+        # data = request.json()
+        data = request.get_json(force=True)
+        new_city = City(
+            name = data["name"],
+            state_id = data["state_id"]    
+        )
+        db.session.add(new_city)
+        db.session.commit()
+        response_body = {
+            "msg": "city añadida"
+        }
+        return jsonify(response_body), 200
+    except Exception as error:
+        print('error?', error)
+        return jsonify({"message": str(error)}), 400
 
 
 @api.route('/user', methods=['POST'])
@@ -349,3 +360,24 @@ def get_events():
 #     print(events)
 #     events = [event.serialize() for event in events]
 #     return jsonify(events), 200
+
+
+
+# PRUEBAS
+@api.route('/country', methods=['GET'])
+def get_country():
+        
+    countries = Country.query.all()
+    countries = list(map(lambda country:country.serialize(), countries))
+    print(countries)
+    return jsonify ({'countries': countries}), 200
+
+@api.route('/state', methods=['GET'])
+def get_states():
+        
+    states = State.query.all()
+    states = list(map(lambda states:states.serialize(), states))
+    print(states)
+    return jsonify ({'states': states}), 200
+
+    
