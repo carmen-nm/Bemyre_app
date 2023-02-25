@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, BandInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, Post, Comment
+from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand
 from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
@@ -77,7 +77,8 @@ def add_city():
 
 @api.route('/user', methods=['POST'])
 def add_user():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_user = User(
         user_name = data["user_name"],
         profile_img = data["profile_img"],
@@ -87,14 +88,59 @@ def add_user():
         first_name = data["first_name"],
         last_name = data["last_name"],
         artistic_name = data["artistic_name"],
+        description = data["description"],
         youtube_url = data["youtube_url"],
         spotify_url = data["spotify_url"],
         website_url = data["website_url"],
         is_active = data["is_active"],
         city_id = data["city_id"],
     )
+
+
+
+
+    # if (data["is_active"] == "true"):
+    #     new_user = User(
+    #         user_name = data["user_name"],
+    #         profile_img = data["profile_img"],
+    #         portrait_img = data["portrait_img"],
+    #         email = data["email"], 
+    #         password = data["password"],
+    #         first_name = data["first_name"],
+    #         last_name = data["last_name"],
+    #         artistic_name = data["artistic_name"],
+    #         description = data["description"],
+    #         youtube_url = data["youtube_url"],
+    #         spotify_url = data["spotify_url"],
+    #         website_url = data["website_url"],
+    #         is_active = True,
+    #         city_id = data["city_id"],
+    #     )
+    #     db.session.add(new_user)
+    #     db.session.commit()
+    #     if data["is_active"] = "false":
+    #     new_user = User(
+    #         user_name = data["user_name"],
+    #         profile_img = data["profile_img"],
+    #         portrait_img = data["portrait_img"],
+    #         email = data["email"], 
+    #         password = data["password"],
+    #         first_name = data["first_name"],
+    #         last_name = data["last_name"],
+    #         artistic_name = data["artistic_name"],
+    #         description = data["description"],
+    #         youtube_url = data["youtube_url"],
+    #         spotify_url = data["spotify_url"],
+    #         website_url = data["website_url"],
+    #         is_active = False,
+    #         city_id = data["city_id"],
+    #     )
+
+    
     db.session.add(new_user)
     db.session.commit()
+
+
     response_body = {
         "msg": "user añadido"
     }
@@ -103,7 +149,8 @@ def add_user():
 
 @api.route('/instrumentcategory', methods=['POST'])
 def add_instrumentcategory():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_instrumentcategory = InstrumentCategory(
         name = data["name"],
     )
@@ -117,7 +164,8 @@ def add_instrumentcategory():
 
 @api.route('/instrument', methods=['POST'])
 def add_instrument():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_instrument = Instrument(
         name = data["name"],
         instrument_category_id = data["instrument_category_id"]
@@ -132,7 +180,8 @@ def add_instrument():
 
 @api.route('/musicgenre', methods=['POST'])
 def add_musicgenre():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_musicgenre = MusicGenre(
         name = data["name"],        
     )
@@ -146,7 +195,8 @@ def add_musicgenre():
 
 @api.route('/band', methods=['POST'])
 def add_band():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_band = Band(
         band_profile_img = data["band_profile_img"],
         band_portrait_img = data["band_portrait_img"],
@@ -164,7 +214,8 @@ def add_band():
 
 @api.route('/establishment', methods=['POST'])
 def add_establishment():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_establishment = Establishment(
         establishment_profile_img = data["establishment_profile_img"],
         establishment_portrait_img = data["establishment_portrait_img"],
@@ -184,7 +235,8 @@ def add_establishment():
 
 @api.route('/event', methods=['POST'])
 def add_event():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_event = Event(
         event_profile_img = data["event_profile_img"],
         event_portrait_img = data["event_portrait_img"],
@@ -203,7 +255,8 @@ def add_event():
 
 @api.route('/userband', methods=['POST'])
 def add_userband():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_userband = UserBand(
         band_id = data["band_id"],
         user_id = data["user_id"],
@@ -217,7 +270,8 @@ def add_userband():
 
 @api.route('/userinstrument', methods=['POST'])
 def add_userinstrument():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_userinstrument = UserInstrument(
         instrument_id = data["instrument_id"],
         user_id = data["user_id"],
@@ -231,7 +285,8 @@ def add_userinstrument():
 
 @api.route('/bandinstrument', methods=['POST'])
 def add_bandinstrument():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_bandinstrument = BandInstrument(
         instrument_id = data["instrument_id"],
         band_id = data["band_id"],
@@ -245,7 +300,8 @@ def add_bandinstrument():
 
 @api.route('/musicgenreestablishment', methods=['POST'])
 def add_musicgenreestablishment():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_musicgenreestablishment = MusicGenreEstablishment(
         music_genre_id = data["music_genre_id"],
         establishment_id = data["establishment_id"],
@@ -257,10 +313,11 @@ def add_musicgenreestablishment():
     }
     return jsonify(response_body), 200
 
-
+ 
 @api.route('/musicgenreevent', methods=['POST'])
 def add_musicgenreevent():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_musicgenreevent = MusicGenreEvent(
         music_genre_id = data["music_genre_id"],
         event_id = data["event_id"],
@@ -274,7 +331,8 @@ def add_musicgenreevent():
 
 @api.route('/musicgenreuser', methods=['POST'])
 def add_musicgenreuser():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_musicgenreuser = MusicGenreUser(
         music_genre_id = data["music_genre_id"],
         user_id = data["user_id"],
@@ -289,7 +347,8 @@ def add_musicgenreuser():
 
 @api.route('/musicgenreband', methods=['POST'])
 def add_musicgenreband():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_musicgenreband = MusicGenreBand(
         music_genre_id = data["music_genre_id"],
         band_id = data["band_id"],
@@ -304,7 +363,8 @@ def add_musicgenreband():
 
 @api.route('/post', methods=['POST'])
 def add_post():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_post = Post(
         user_id = data["user_id"],
         description = data["description"],
@@ -323,7 +383,8 @@ def add_post():
 
 @api.route('/comment', methods=['comment'])
 def add_comment():
-    data = request.json()
+    # data = request.json()
+    data = request.get_json(force=True)
     new_comment = Comment(
         user_id = data["user_id"],
         description = data["description"],

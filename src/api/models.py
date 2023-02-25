@@ -56,25 +56,26 @@ class City(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(80), unique=True, nullable=False)
-    profile_img = db.Column(db.String(255), nullable=True)
-    portrait_img = db.Column(db.String(255), nullable=True)
+    profile_img = db.Column(db.String(700), nullable=True)
+    portrait_img = db.Column(db.String(700), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=True)
     artistic_name = db.Column(db.String(80), nullable=True)
-    description = db.Column(db.String(500), nullable=True)
-    youtube_url = db.Column(db.String(80), nullable=True)
-    spotify_url = db.Column(db.String(80), nullable=True)
-    website_url = db.Column(db.String(80), nullable=True)
+    description = db.Column(db.String(700), nullable=True)
+    youtube_url = db.Column(db.String(700), nullable=True)
+    spotify_url = db.Column(db.String(700), nullable=True)
+    website_url = db.Column(db.String(700), nullable=True)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
     establishments = db.relationship("Establishment", backref="User", lazy=True)
+    bands = db.relationship("Band", backref="User", lazy=True)
     user_bands = db.relationship('UserBand', backref='User', lazy=True) 
     user_instrument = db.relationship("UserInstrument", backref="User", lazy=True)
     music_genre_user = db.relationship("MusicGenreUser", backref="User", lazy=True)
-    posts = db.relationship("Post", backref="User", lazy=True)
-    comments = db.relationship("Comment", backref="User", lazy=True)
+    # posts = db.relationship("Post", backref="User", lazy=True)
+    # comments = db.relationship("Comment", backref="User", lazy=True)
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -115,7 +116,7 @@ class Instrument(db.Model):
     name = db.Column(db.String(80), nullable=False)
     instrument_category_id = db.Column(db.Integer, db.ForeignKey('instrument_category.id'), nullable=False)
     user_instrument = db.relationship("UserInstrument", backref="Instrument", lazy=True)
-    band_instrument = db.relationship("BandInstrument", backref="Instrument", lazy=True)
+    # band_instrument = db.relationship("BandInstrument", backref="Instrument", lazy=True)
 
     def __repr__(self):
         return f'<Instrument {self.name}>'
@@ -150,12 +151,13 @@ class Band(db.Model):
     band_profile_img = db.Column(db.String(255), nullable=True)
     band_portrait_img = db.Column(db.String(255), nullable=True)
     name = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.String(80), nullable=True)
+    description = db.Column(db.String(700), nullable=True)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
     user_bands = db.relationship('UserBand', backref='Band', lazy=True)
-    band_instrument = db.relationship("BandInstrument", backref="Band", lazy=True) 
     music_genre_band = db.relationship("MusicGenreBand", backref="Band", lazy=True) 
-    
+    # podria poner user_id de nuevo pero que fuese una foreinkey normal para el owner?
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
     def __repr__(self):
         return f'<Band {self.name}>'
 
@@ -176,12 +178,12 @@ class Establishment(db.Model):
     establishment_portrait_img = db.Column(db.String(255), nullable=True)
     name = db.Column(db.String(80), nullable=False)
     ubicacion = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.String(80), nullable=True)
+    description = db.Column(db.String(700), nullable=True)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     events = db.relationship("Event", backref="Establishment", lazy=True) 
     music_genre_establishment = db.relationship("MusicGenreEstablishment", backref="Establishment", lazy=True)
-    
+
     def __repr__(self):
         return f'<Establishment {self.name}>'
 
@@ -197,10 +199,10 @@ class Establishment(db.Model):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    event_profile_img = db.Column(db.String(255), nullable=True)
-    event_portrait_img = db.Column(db.String(255), nullable=True)
+    event_profile_img = db.Column(db.String(550), nullable=True)
+    event_portrait_img = db.Column(db.String(550), nullable=True)
     name = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.String(80), nullable=True)
+    description = db.Column(db.String(700), nullable=True)
     establishment_id = db.Column(db.Integer, db.ForeignKey('establishment.id'), nullable=False)
     date = db.Column(db.DateTime, nullable=True)
     music_genre_event = db.relationship("MusicGenreEvent", backref="Event", lazy=True)
@@ -227,7 +229,7 @@ class Event(db.Model):
             "description": self.description,
             "establishment_id": self.establishment_id,
             "music_genre_event": music_genre_event_list,
-            "date": self.date.strftime("%m/%d/%Y, %H:%M"),
+            "date": self.date.strftime("%m/%d/%Y"),
             "establishment_name": Establishment.query.get(self.establishment_id).name,            
             "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
             "city": city.name
@@ -265,20 +267,20 @@ class UserInstrument(db.Model): #intermedia
         }
 
 
-class BandInstrument(db.Model): #intermedia
-    id = db.Column(db.Integer, primary_key=True)
-    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
-    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
+# class BandInstrument(db.Model): #intermedia
+#     id = db.Column(db.Integer, primary_key=True)
+#     instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
+#     band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
 
-    def __repr__(self):
-        return f'<BandInstrument {self.id}>'
+#     def __repr__(self):
+#         return f'<BandInstrument {self.id}>'
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "instrument_id": self.instrument_id,
-            "band_id": self.band_id,
-        }
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "instrument_id": self.instrument_id,
+#             "band_id": self.band_id,
+#         }
 
 class MusicGenreEstablishment(db.Model): #intermedia
     id = db.Column(db.Integer, primary_key=True)
@@ -346,47 +348,47 @@ class MusicGenreBand(db.Model): #intermedia
         }
 
 
-class Post(db.Model): 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    description = db.Column(db.String(80), nullable=True)
-    created_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
-    post_img = db.Column(db.String(255), nullable=True)
-    post_video = db.Column(db.String(255), nullable=True)
+# class Post(db.Model): 
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     description = db.Column(db.String(80), nullable=True)
+#     created_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
+#     updated_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
+#     post_img = db.Column(db.String(255), nullable=True)
+#     post_video = db.Column(db.String(255), nullable=True)
     
 
-    def __repr__(self):
-        return f'<Post {self.id}>'
+#     def __repr__(self):
+#         return f'<Post {self.id}>'
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "description": self.description,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-            "post_img": self.post_img,
-            "post_video": self.post_video,
-        }
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "user_id": self.user_id,
+#             "description": self.description,
+#             "created_at": self.created_at,
+#             "updated_at": self.updated_at,
+#             "post_img": self.post_img,
+#             "post_video": self.post_video,
+#         }
 
-class Comment(db.Model): 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    description = db.Column(db.String(80), nullable=True)
-    created_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
+# class Comment(db.Model): 
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+#     description = db.Column(db.String(80), nullable=True)
+#     created_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
+#     updated_at = db.Column(db.DateTime, nullable = False , default = datetime.datetime.utcnow)
 
-    def __repr__(self):
-        return f'<Comment {self.id}>'
+#     def __repr__(self):
+#         return f'<Comment {self.id}>'
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "post_id": self.post_id,
-            "description": self.description,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-        }
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "user_id": self.user_id,
+#             "post_id": self.post_id,
+#             "description": self.description,
+#             "created_at": self.created_at,
+#             "updated_at": self.updated_at,
+#         }
