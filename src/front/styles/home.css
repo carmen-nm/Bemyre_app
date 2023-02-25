@@ -34,9 +34,20 @@
 }
 
 .cardConcert{
-    min-width: 15rem!important;
-    height: 25rem!important;
-    box-sizing:border-box
+    /* width: 35rem!important; */
+    max-width: 250px!important;
+    min-width: 250px!important;
+    /* height: 30rem!important; */
+    max-height: 500px!important;
+    min-height: 500px!important;
+    box-sizing:border-box!important;
+    
+}
+
+.bodyCard{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .imagCard{
@@ -49,7 +60,7 @@
 .rowCards {
     /* margin: 3rem 2rem; */
     display: flex;
-    overflow-x: auto;
+    overflow-x: auto!important;
     /* scroll-behavior: smooth; */
     gap: 1rem;
     width: 100%;

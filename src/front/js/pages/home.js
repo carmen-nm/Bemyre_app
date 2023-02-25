@@ -6,24 +6,7 @@ import { CardConcert } from "../component/CardConcert";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
-  //   const concerts = [
-  //     {
-  //       name: "nombre1",
-  //       description: "description1",
-  //       event_profile_img: "url",
-  //       establishment_name: "nombre del local",
-  //       music_genre_event: [1, 2, 3],
-  //     },
-  //     {
-  //       name: "nombre2",
-  //       description: "description2",
-  //       event_profile_img: "url",
-  //       establishment_name: "nombre del local",
-  //       music_genre_event: [1, 2, 3],
-  //     },
-  //   ];
 
-  // console.log(store.concerts)
   return (
     <>
       <Jumbotron />
