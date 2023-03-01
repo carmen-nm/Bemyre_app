@@ -6,7 +6,6 @@ import { CardConcert } from "../component/CardConcert";
 import { CardMusician } from "../component/CardMusician";
 import { CardEstablishment } from "../component/CardEstablishment";
 import { CardBand } from "../component/CardBand";
-import { Footer } from "../component/footer";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
@@ -80,7 +79,6 @@ export const Home = () => {
           ))}
         </div>
       </div>
-      <Footer/>
     </>
   );
 };

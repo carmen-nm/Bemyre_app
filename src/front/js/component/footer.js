@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../../../../public/bemyre.svg'
+import logotipo from '../../img/logotipo.png'
 
 export const Footer = () => {
   return (
@@ -7,9 +7,9 @@ export const Footer = () => {
         <div className='b-example-divider'></div>
         <footer className="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
             <div className='col mb-3'>
-                <a href='/' className='d-flex align-items-center mb-3 link-dark text-decoration-none'>
-                    {logo}
-                </a>
+                <img src={logotipo} href='/' className='d-flex align-items-center mb-3 link-dark text-decoration-none' />
+                    
+                
                 <p className='class="text-muted'>© 2022</p>
             </div>
             <div className='col mb-3'></div>
