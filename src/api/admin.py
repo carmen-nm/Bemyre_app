@@ -1,7 +1,7 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand
+from .models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, InDemand, FormsInDemand, UserFormsInDemand
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -27,6 +27,10 @@ def setup_admin(app):
     admin.add_view(ModelView(MusicGenreEvent, db.session))
     admin.add_view(ModelView(MusicGenreUser, db.session))
     admin.add_view(ModelView(MusicGenreBand, db.session))
+    admin.add_view(ModelView(InDemand, db.session))
+    admin.add_view(ModelView(FormsInDemand, db.session))
+    admin.add_view(ModelView(UserFormsInDemand, db.session))
+
     # admin.add_view(ModelView(Post, db.session))
     # admin.add_view(ModelView(Comment, db.session))
 

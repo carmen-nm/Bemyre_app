@@ -44,10 +44,35 @@
     
 }
 
+.cardMusician{
+    
+    max-width: 250px!important;
+    min-width: 250px!important;
+    max-height: 370px!important;
+    min-height: 370px!important;
+    box-sizing:border-box!important;
+}
+
+.cardEstablishment{
+    max-width: 250px!important;
+    min-width: 250px!important;
+    max-height: 550px!important;
+    min-height: 550px!important;
+    box-sizing:border-box!important;
+}
+
+.cardBand{
+    max-width: 250px!important;
+    min-width: 250px!important;
+    max-height: 550px!important;
+    min-height: 550px!important;
+    box-sizing:border-box!important;
+}
+
 .bodyCard{
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .imagCard{

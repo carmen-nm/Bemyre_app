@@ -13,6 +13,7 @@ export const CardConcert = ({
   ubicacion,
   city,
   date,
+  hour
 
 }) => {
   
@@ -26,6 +27,7 @@ export const CardConcert = ({
         <p className="card-text textosobrante">{description}</p>
         <p className="card-text">{ubicacion} | {city}</p>
         <p className="card-text">{date}</p>
+        <p className="card-text">{hour}h</p>
       </div>  
       <div class="card-footer">
           {music_genre_event.map((element)=>(<span className="badge rounded-pill bg-warning m-1">{element.music_genre_name}</span>))}        

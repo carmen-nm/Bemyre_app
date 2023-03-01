@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand
+from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, InDemand, FormsInDemand, UserFormsInDemand
 from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
@@ -404,14 +404,44 @@ def add_comment():
 @api.route('/events', methods=['GET'])
 def get_events():     
     events = Event.query.all()
-    print('hola', events)
+    # print('hola', events)
     events_list = []
     print(events_list)
     for event in events:
-        print('1', event)
+        # print('1', event)
         events_list.append(event.serialize())    
     return jsonify(events_list), 200
 
+
+# pintar cards musician
+@api.route('/musicians', methods=['GET'])
+def get_musicians():     
+    musicians = User.query.all()
+    # print('hola', musicians)
+    musicians_list = []
+    # print(musicians_list)
+    for musician in musicians:
+        # print('1', musician)
+        musicians_list.append(musician.serialize())    
+    return jsonify(musicians_list), 200
+
+
+@api.route('/establishment', methods=['GET'])
+def get_establishment():     
+    establishment = Establishment.query.all()
+    establishment_list = []
+    for establishment in establishment:
+        establishment_list.append(establishment.serialize())    
+    return jsonify(establishment_list), 200
+
+
+@api.route('/bands', methods=['GET'])
+def get_band():     
+    band = Band.query.all()
+    band_list = []
+    for band in band:
+        band_list.append(band.serialize())    
+    return jsonify(band_list), 200
 
 
 # @api.route('/<int:genre_id>/event/', methods=['GET'])

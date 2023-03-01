@@ -81,6 +81,13 @@ class User(db.Model):
         return f'<User {self.email}>'
 
     def serialize(self):
+        # instrument = Intrument.query.filter_by
+        # instrument_list= []
+        # for user_ins in user_instrument:
+        #     instrument_list.append(user_ins.serialize())
+
+        city = City.query.filter_by(id=self.city_id).first()
+        # user_instrument = UserInstrument.query.filter_by(user_id=self.id).first()
         return {
             "id": self.id,
             "user_name": self.user_name,
@@ -94,7 +101,14 @@ class User(db.Model):
             "youtube_url": self.youtube_url,
             "spotify_url": self.spotify_url,
             "website_url": self.website_url,
-            "city_id": self.city_id,
+            "city": city.name,
+            "music_genre_user": [music_genre.serialize() for music_genre in self.music_genre_user],
+            # "user_instrument": user_instrument.instrument_name
+            # "instrument": instrument_list
+            # "instrument": user_instrument.instrument_name
+            "user_instrument": [user_instru.serialize() for user_instru in self.user_instrument]
+            # "user_instrument": user_instrument.serialize()
+
           
         }
 
@@ -117,6 +131,8 @@ class Instrument(db.Model):
     instrument_category_id = db.Column(db.Integer, db.ForeignKey('instrument_category.id'), nullable=False)
     user_instrument = db.relationship("UserInstrument", backref="Instrument", lazy=True)
     # band_instrument = db.relationship("BandInstrument", backref="Instrument", lazy=True)
+    in_demand = db.relationship('InDemand', backref='Instrument', lazy=True)
+
 
     def __repr__(self):
         return f'<Instrument {self.name}>'
@@ -157,6 +173,8 @@ class Band(db.Model):
     music_genre_band = db.relationship("MusicGenreBand", backref="Band", lazy=True) 
     # podria poner user_id de nuevo pero que fuese una foreinkey normal para el owner?
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    in_demand = db.relationship('InDemand', backref='Band', lazy=True)
+
 
     def __repr__(self):
         return f'<Band {self.name}>'
@@ -168,6 +186,71 @@ class Band(db.Model):
             "band_portrait_img": self.band_portrait_img,
             "name": self.name,
             "description": self.description,
+            "music_genre_band": [music_genre.serialize() for music_genre in self.music_genre_band],
+            "city": City.query.get(self.city_id).name
+        }
+
+class InDemand(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    forms_in_demand = db.relationship("FormsInDemand", backref="InDemand", lazy=True) 
+    band_id = db.Column(db.Integer, db.ForeignKey('band.id'), nullable=False)
+    instrument_id = db.Column(db.Integer, db.ForeignKey('instrument.id'), nullable=False)
+    description = db.Column(db.String(700), nullable=True)
+
+    def __repr__(self):
+        return f'<InDemand {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "band_profile_img": self.band_profile_img,
+            # pillar la city de la band
+            # pillar lso generos de musica de la band
+            # el intrument se registra con el id aunq se seleccione con un get desde el nombre
+        }
+
+
+
+class FormsInDemand(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    in_demand_id = db.Column(db.Integer, db.ForeignKey('in_demand.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    availability = db.Column(db.String(700), nullable=True)
+    residence = db.Column(db.String(700), nullable=True)
+    experience  = db.Column(db.String(700), nullable=True)
+    moreinfo = db.Column(db.String(700), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+
+    def __repr__(self):
+        return f'<FormsInDemand {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "availability": self.availability,
+            "residence": self.residence,
+            "experience": self.experience,
+            "moreinfo": self.moreinfo,
+            "age": self.age,
+            # pillar el instrumento del user (inamovibles)
+            # pillar lso generos de musica del user (inamovibles)
+        }
+
+
+class UserFormsInDemand(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    forms_in_demand_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f'<UserFormsInDemand {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "forms_in_demand_id": self.forms_in_demand_id,
         }
 
 
@@ -194,7 +277,10 @@ class Establishment(db.Model):
             "establishment_portrait_img": self.establishment_portrait_img,
             "name": self.name,
             "description": self.description,
+            "ubicacion": self.ubicacion,
             "user_id": self.user_id,
+            "city": City.query.get(self.city_id).name,
+            "music_genre_establishment": [music_genre.serialize() for music_genre in self.music_genre_establishment],
         }
 
 class Event(db.Model):
@@ -232,7 +318,8 @@ class Event(db.Model):
             "date": self.date.strftime("%m/%d/%Y"),
             "establishment_name": Establishment.query.get(self.establishment_id).name,            
             "ubicacion": Establishment.query.get(self.establishment_id).ubicacion,
-            "city": city.name
+            "city": city.name,
+            "hour": self.date.strftime("%H:%M")
         }
 
 class UserBand(db.Model): #intermedia
@@ -264,6 +351,7 @@ class UserInstrument(db.Model): #intermedia
             "id": self.id,
             "instrument_id": self.instrument_id,
             "user_id": self.user_id,
+            "instrument_name": Instrument.query.get(self.instrument_id).name
         }
 
 
@@ -295,6 +383,7 @@ class MusicGenreEstablishment(db.Model): #intermedia
             "id": self.id,
             "music_genre_id": self.music_genre_id,
             "establishment_id": self.establishment_id,
+            "music_genre_name": MusicGenre.query.get(self.music_genre_id).name
         }
 
 class MusicGenreEvent(db.Model): #intermedia
@@ -329,6 +418,7 @@ class MusicGenreUser(db.Model): #intermedia
             "id": self.id,
             "music_genre_id": self.music_genre_id,
             "user_id": self.user_id,
+            "music_genre_name": MusicGenre.query.get(self.music_genre_id).name
         }
 
 
@@ -345,6 +435,7 @@ class MusicGenreBand(db.Model): #intermedia
             "id": self.id,
             "music_genre_id": self.music_genre_id,
             "band_id": self.band_id,
+            "music_genre_name": MusicGenre.query.get(self.music_genre_id).name
         }
 
 

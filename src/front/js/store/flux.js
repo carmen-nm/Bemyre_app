@@ -14,7 +14,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			events: []
+			events: [],
+			musicians: [],
+			establishments: [],
+			bands: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -62,6 +65,57 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  })
 				  .then((result) => {
 					setStore({ events: result });
+					
+				  });
+			  },
+			  fetchMusician: async () => {
+				
+				await fetch(`${process.env.BACKEND_URL}/api/musicians`, {
+				  method: "GET",
+				  headers: {
+					// Authorization: `Bearer ${getStore().token_local}`,
+					"Content-Type": "application/json",
+				  },
+				})
+				  .then((response) => {
+					return response.json();
+				  })
+				  .then((result) => {
+					setStore({ musicians: result });
+					
+				  });
+			  },
+			  fetchEstablishment: async () => {
+				
+				await fetch(`${process.env.BACKEND_URL}/api/establishment`, {
+				  method: "GET",
+				  headers: {
+					// Authorization: `Bearer ${getStore().token_local}`,
+					"Content-Type": "application/json",
+				  },
+				})
+				  .then((response) => {
+					return response.json();
+				  })
+				  .then((result) => {
+					setStore({ establishments: result });
+					
+				  });
+			  },
+			  fetchBands: async () => {
+				
+				await fetch(`${process.env.BACKEND_URL}/api/bands`, {
+				  method: "GET",
+				  headers: {
+					// Authorization: `Bearer ${getStore().token_local}`,
+					"Content-Type": "application/json",
+				  },
+				})
+				  .then((response) => {
+					return response.json();
+				  })
+				  .then((result) => {
+					setStore({ bands: result });
 					
 				  });
 			  },
