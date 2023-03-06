@@ -13,7 +13,7 @@ export const Conciertos = () => {
       <div className="container ">
         <h2 className="text-center mt-5 mb-5">Conciertos cerca de ti</h2>
         <div className="WrapCards">
-          <div className=" d-flex flex-wrap justify-items-center ">
+          <div className=" d-flex flex-wrap justify-items-center gap-2">
         {store.events?.map((element) => (
             
             <CardConcert

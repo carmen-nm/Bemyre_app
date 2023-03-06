@@ -106,8 +106,10 @@ class User(db.Model):
             # "user_instrument": user_instrument.instrument_name
             # "instrument": instrument_list
             # "instrument": user_instrument.instrument_name
-            "user_instrument": [user_instru.serialize() for user_instru in self.user_instrument]
+            "user_instrument": [user_instru.serialize() for user_instru in self.user_instrument],
             # "user_instrument": user_instrument.serialize()
+            "bands": [band.serialize() for band in self.bands],
+            "establishments": [establishment.serialize() for establishment in self.establishments]
 
           
         }
@@ -238,20 +240,20 @@ class FormsInDemand(db.Model):
         }
 
 
-class UserFormsInDemand(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    forms_in_demand_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+# class UserFormsInDemand(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+#     forms_in_demand_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self):
-        return f'<UserFormsInDemand {self.id}>'
+#     def __repr__(self):
+#         return f'<UserFormsInDemand {self.id}>'
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "forms_in_demand_id": self.forms_in_demand_id,
-        }
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "user_id": self.user_id,
+#             "forms_in_demand_id": self.forms_in_demand_id,
+#         }
 
 
 

@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, InDemand, FormsInDemand, UserFormsInDemand
+from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, InDemand, FormsInDemand
 from api.utils import generate_sitemap, APIException
 
 api = Blueprint('api', __name__)
@@ -19,7 +19,7 @@ def handle_hello():
 
 
 
-# RELLENADO DE TABLAS SIN JWT NI TOKEN
+# RELLENADO DE TABLAS SIN JWT NI TOKEN>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @api.route('/country', methods=['POST'])
 def add_country():
     # data = request.json()
@@ -400,7 +400,7 @@ def add_comment():
     return jsonify(response_body), 200
 
 
-# pintar cards eventos
+# PINTAR CARDS>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @api.route('/events', methods=['GET'])
 def get_events():     
     events = Event.query.all()
@@ -413,7 +413,6 @@ def get_events():
     return jsonify(events_list), 200
 
 
-# pintar cards musician
 @api.route('/musicians', methods=['GET'])
 def get_musicians():     
     musicians = User.query.all()
@@ -470,5 +469,16 @@ def get_states():
     states = list(map(lambda states:states.serialize(), states))
     print(states)
     return jsonify ({'states': states}), 200
+
+
+
+# PERFIL USER>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+@api.route('/profile/<int:userId>', methods=['GET'])
+def get_perfilUser(userId):
+    user = User.query.filter_by(id=userId).first()
+    return jsonify(user.serialize()), 200
+
+
+
 
     

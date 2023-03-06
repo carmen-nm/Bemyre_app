@@ -10,7 +10,7 @@ export const Footer = () => {
                 <img src={logotipo} href='/' className='d-flex align-items-center mb-3 link-dark text-decoration-none' />
                     
                 
-                <p className='class="text-muted'>© 2022</p>
+                <p className='class="text-muted'>© 2023</p>
             </div>
             <div className='col mb-3'></div>
             <div className='col mb-3'>

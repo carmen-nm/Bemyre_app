@@ -12,7 +12,7 @@ export const Establishment = () => {
       <div className="container ">
         <h2 className="text-center mt-5 mb-5">Locales con música en vivo</h2>
         
-          <div className=" d-flex flex-wrap justify-items-center ">
+          <div className=" d-flex flex-wrap justify-items-center gap-2">
             {store.establishments?.map((element) => (
               <CardEstablishment
               name={element.name}

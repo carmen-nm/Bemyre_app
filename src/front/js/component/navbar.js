@@ -23,6 +23,9 @@ export const Navbar = () => {
 					<Link to="/establishments">
 						<button className="btn btn-primary">Locales</button>
 					</Link>
+					<Link to="/profile/:userId">
+						<button className="btn btn-primary">Prueba</button>
+					</Link>
 				</div>
 			</div>
 		</nav>

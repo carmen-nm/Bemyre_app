@@ -12,7 +12,7 @@ export const Musicians = () => {
       <div className="container ">
         <h2 className="text-center mt-5 mb-5">Músicos cerca de ti</h2>
         
-          <div className=" d-flex flex-wrap justify-items-center ">
+          <div className=" d-flex flex-wrap justify-items-center gap-2">
             {store.musicians?.map((element) => (
               <CardMusician
                 profile_img={element.profile_img}

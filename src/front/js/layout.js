@@ -12,6 +12,7 @@ import { Conciertos } from "./pages/Conciertos";
 import { Musicians } from "./pages/Musicians";
 import { Bands } from "./pages/Bands";
 import { Establishment } from "./pages/Establishment";
+import { ProfileMusician } from "./pages/ProfileMusician";
 
 
 //create your first component
@@ -32,7 +33,7 @@ const Layout = () => {
                         <Route element={<Musicians />} path="/musicians" />
                         <Route element={<Bands />} path="/bands" />
                         <Route element={<Establishment />} path="/establishments" />
-
+                        <Route element={<ProfileMusician />} path="/profile/:userId" />
 
 
                         <Route element={<h1>Not found!</h1>} />
