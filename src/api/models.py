@@ -76,6 +76,8 @@ class User(db.Model):
     music_genre_user = db.relationship("MusicGenreUser", backref="User", lazy=True)
     # posts = db.relationship("Post", backref="User", lazy=True)
     # comments = db.relationship("Comment", backref="User", lazy=True)
+    user_forms_in_demand = db.relationship("UserFormsInDemand", backref="User", lazy=True) 
+
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -216,12 +218,14 @@ class InDemand(db.Model):
 class FormsInDemand(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     in_demand_id = db.Column(db.Integer, db.ForeignKey('in_demand.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     availability = db.Column(db.String(700), nullable=True)
     residence = db.Column(db.String(700), nullable=True)
     experience  = db.Column(db.String(700), nullable=True)
     moreinfo = db.Column(db.String(700), nullable=True)
     age = db.Column(db.Integer, nullable=True)
+    user_forms_in_demand = db.relationship("UserFormsInDemand", backref="FormsInDemand", lazy=True) 
+
 
     def __repr__(self):
         return f'<FormsInDemand {self.id}>'
@@ -240,20 +244,20 @@ class FormsInDemand(db.Model):
         }
 
 
-# class UserFormsInDemand(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-#     forms_in_demand_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+class UserFormsInDemand(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    forms_in_demand_id = db.Column(db.Integer, db.ForeignKey('forms_in_demand.id'), nullable=False)
 
-#     def __repr__(self):
-#         return f'<UserFormsInDemand {self.id}>'
+    def __repr__(self):
+        return f'<UserFormsInDemand {self.id}>'
 
-#     def serialize(self):
-#         return {
-#             "id": self.id,
-#             "user_id": self.user_id,
-#             "forms_in_demand_id": self.forms_in_demand_id,
-#         }
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "forms_in_demand_id": self.forms_in_demand_id,
+        }
 
 
 
