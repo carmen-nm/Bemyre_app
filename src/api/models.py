@@ -70,7 +70,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
     establishments = db.relationship("Establishment", backref="User", lazy=True)
-    bands = db.relationship("Band", backref="User", lazy=True)
+    # bands = db.relationship("Band", backref="User", lazy=True)
     user_bands = db.relationship('UserBand', backref='User', lazy=True) 
     user_instrument = db.relationship("UserInstrument", backref="User", lazy=True)
     music_genre_user = db.relationship("MusicGenreUser", backref="User", lazy=True)
@@ -110,7 +110,7 @@ class User(db.Model):
             # "instrument": user_instrument.instrument_name
             "user_instrument": [user_instru.serialize() for user_instru in self.user_instrument],
             # "user_instrument": user_instrument.serialize()
-            "bands": [band.serialize() for band in self.bands],
+            # "bands": [band.serialize() for band in self.bands],
             "establishments": [establishment.serialize() for establishment in self.establishments]
 
           
@@ -176,7 +176,7 @@ class Band(db.Model):
     user_bands = db.relationship('UserBand', backref='Band', lazy=True)
     music_genre_band = db.relationship("MusicGenreBand", backref="Band", lazy=True) 
     # podria poner user_id de nuevo pero que fuese una foreinkey normal para el owner?
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     in_demand = db.relationship('InDemand', backref='Band', lazy=True)
 
 
@@ -191,6 +191,7 @@ class Band(db.Model):
             "name": self.name,
             "description": self.description,
             "music_genre_band": [music_genre.serialize() for music_genre in self.music_genre_band],
+            # "user_id": self.user_id,
             "city": City.query.get(self.city_id).name
         }
 

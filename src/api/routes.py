@@ -344,7 +344,7 @@ def add_post():
     return jsonify(response_body), 200
 
 
-@api.route('/comment', methods=['comment'])
+@api.route('/comment', methods=['POST'])
 def add_comment():
     # data = request.json()
     data = request.get_json(force=True)
@@ -432,6 +432,14 @@ def get_states():
     states = list(map(lambda states:states.serialize(), states))
     print(states)
     return jsonify ({'states': states}), 200
+
+@api.route('/user', methods=['GET'])
+def get_users():
+        
+    users = User.query.all()
+    users = list(map(lambda users:users.serialize(), users))
+    # print(users)
+    return jsonify ({'users': users}), 200
 
 
 
