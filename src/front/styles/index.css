@@ -68,3 +68,10 @@
   align-items: center;
 }
 }
+
+
+.FormButton{
+  display: flex;
+  justify-self: center;
+  margin: auto;
+}

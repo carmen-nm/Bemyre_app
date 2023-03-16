@@ -13,6 +13,7 @@ import { Musicians } from "./pages/Musicians";
 import { Bands } from "./pages/Bands";
 import { Establishment } from "./pages/Establishment";
 import { ProfileMusician } from "./pages/ProfileMusician";
+import { Login } from "./pages/Login";
 
 
 //create your first component
@@ -34,6 +35,7 @@ const Layout = () => {
                         <Route element={<Bands />} path="/bands" />
                         <Route element={<Establishment />} path="/establishments" />
                         <Route element={<ProfileMusician />} path="/profile/:userId" />
+                        <Route element={<Login />} path="/login" />
 
 
                         <Route element={<h1>Not found!</h1>} />

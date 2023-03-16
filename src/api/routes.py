@@ -4,6 +4,9 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Country, State, City, InstrumentCategory, Instrument, MusicGenre, Band, Establishment, Event, UserInstrument, UserBand, MusicGenreEstablishment, MusicGenreEvent, MusicGenreUser, MusicGenreBand, InDemand, FormsInDemand, UserFormsInDemand
 from api.utils import generate_sitemap, APIException
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+import json
+
 
 api = Blueprint('api', __name__)
 
@@ -95,46 +98,6 @@ def add_user():
         is_active = data["is_active"],
         city_id = data["city_id"],
     )
-
-
-
-
-    # if (data["is_active"] == "true"):
-    #     new_user = User(
-    #         user_name = data["user_name"],
-    #         profile_img = data["profile_img"],
-    #         portrait_img = data["portrait_img"],
-    #         email = data["email"], 
-    #         password = data["password"],
-    #         first_name = data["first_name"],
-    #         last_name = data["last_name"],
-    #         artistic_name = data["artistic_name"],
-    #         description = data["description"],
-    #         youtube_url = data["youtube_url"],
-    #         spotify_url = data["spotify_url"],
-    #         website_url = data["website_url"],
-    #         is_active = True,
-    #         city_id = data["city_id"],
-    #     )
-    #     db.session.add(new_user)
-    #     db.session.commit()
-    #     if data["is_active"] = "false":
-    #     new_user = User(
-    #         user_name = data["user_name"],
-    #         profile_img = data["profile_img"],
-    #         portrait_img = data["portrait_img"],
-    #         email = data["email"], 
-    #         password = data["password"],
-    #         first_name = data["first_name"],
-    #         last_name = data["last_name"],
-    #         artistic_name = data["artistic_name"],
-    #         description = data["description"],
-    #         youtube_url = data["youtube_url"],
-    #         spotify_url = data["spotify_url"],
-    #         website_url = data["website_url"],
-    #         is_active = False,
-    #         city_id = data["city_id"],
-    #     )
 
     
     db.session.add(new_user)
@@ -477,6 +440,40 @@ def get_states():
 def get_perfilUser(userId):
     user = User.query.filter_by(id=userId).first()
     return jsonify(user.serialize()), 200
+
+
+# @api.route('/myprofile', methods=['GET'])
+# @jwt_required()
+# def modify_perfilUser():
+    # current_user_id = get_jwt_identity()
+    # user = User.query.filter_by(id=current_user_id).first()
+
+
+
+# LOGIN>>>>>>>>>>
+@api.route('/login', methods=['POST'])
+def login():
+    # data = request.json()
+    data = request.get_json(force=True)
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    user = User.query.filter_by(email=email, password=password).first()
+    if (user == None):
+        return jsonify({'msg': 'El usuario no existe'}), 401
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"token": access_token, "user_id": user.id}), 200
+
+
+
+@api.route('/imagenUser', methods=['GET'])
+@jwt_required()
+def imagenUser():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(id=current_user_id).first()
+    return jsonify({"img": user.profile_img})
+
+
+
 
 
 
