@@ -53,6 +53,13 @@ class City(db.Model):
         
 
 
+# integrantes_table = db.Table('integrantes_table',
+#   db.Column('owner_id', db.Integer, db.ForeignKey('member.id')),
+#   db.Column('member_id', db.Integer, db.ForeignKey('owner.id'))
+# )
+
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(80), unique=True, nullable=False)
@@ -70,14 +77,33 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('city.id'), nullable=True)
     establishments = db.relationship("Establishment", backref="User", lazy=True)
-    # bands = db.relationship("Band", backref="User", lazy=True)
+    bands = db.relationship("Band", backref="User", lazy=True)
     user_bands = db.relationship('UserBand', backref='User', lazy=True) 
     user_instrument = db.relationship("UserInstrument", backref="User", lazy=True)
     music_genre_user = db.relationship("MusicGenreUser", backref="User", lazy=True)
     # posts = db.relationship("Post", backref="User", lazy=True)
     # comments = db.relationship("Comment", backref="User", lazy=True)
     user_forms_in_demand = db.relationship("UserFormsInDemand", backref="User", lazy=True) 
+    # integrantes  = db.relationship('Band',
+    #     secondary = integrantes_table,
+    #     primaryjoin = ('integrantes_table.c.owner_id == id'), 
+    #     secondaryjoin = ('integrantes_table.c.member_id == id'),
+    #     backref = db.backref('User', lazy = 'dynamic'),
+    #     lazy = 'dynamic')
 
+
+    # def integrantes_member(self, listing):
+    #     if not self.is_favorite(listing):
+    #     self.favorites.append(listing)
+    #     return self
+
+    # def unfavorite_listing(self, listing):
+    #     if self.is_favorite(listing):
+    #     self.favorites.remove(listing)
+    #     return self
+
+    # def is_favorite(self, listing):
+    #     return self.favorites.filter(favorites_table.c.listing_id == listing.id).count() > 0
 
     def __repr__(self):
         return f'<User {self.email}>'
@@ -176,7 +202,7 @@ class Band(db.Model):
     user_bands = db.relationship('UserBand', backref='Band', lazy=True)
     music_genre_band = db.relationship("MusicGenreBand", backref="Band", lazy=True) 
     # podria poner user_id de nuevo pero que fuese una foreinkey normal para el owner?
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     in_demand = db.relationship('InDemand', backref='Band', lazy=True)
 
 
@@ -191,7 +217,7 @@ class Band(db.Model):
             "name": self.name,
             "description": self.description,
             "music_genre_band": [music_genre.serialize() for music_genre in self.music_genre_band],
-            # "user_id": self.user_id,
+            "owner_id": self.owner_id,
             "city": City.query.get(self.city_id).name
         }
 

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 2f6735b7ce65
+Revision ID: e54967b6726c
 Revises: 
-Create Date: 2023-03-16 18:07:52.994400
+Create Date: 2023-03-21 17:00:49.970309
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2f6735b7ce65'
+revision = 'e54967b6726c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -54,16 +54,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['state_id'], ['state.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('band',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('band_profile_img', sa.String(length=255), nullable=True),
-    sa.Column('band_portrait_img', sa.String(length=255), nullable=True),
-    sa.Column('name', sa.String(length=80), nullable=False),
-    sa.Column('description', sa.String(length=700), nullable=True),
-    sa.Column('city_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['city_id'], ['city.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_name', sa.String(length=80), nullable=False),
@@ -85,6 +75,18 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('user_name')
     )
+    op.create_table('band',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('band_profile_img', sa.String(length=255), nullable=True),
+    sa.Column('band_portrait_img', sa.String(length=255), nullable=True),
+    sa.Column('name', sa.String(length=80), nullable=False),
+    sa.Column('description', sa.String(length=700), nullable=True),
+    sa.Column('city_id', sa.Integer(), nullable=False),
+    sa.Column('owner_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['city_id'], ['city.id'], ),
+    sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('establishment',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('establishment_profile_img', sa.String(length=255), nullable=True),
@@ -98,36 +100,11 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('in_demand',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('band_id', sa.Integer(), nullable=False),
-    sa.Column('instrument_id', sa.Integer(), nullable=False),
-    sa.Column('description', sa.String(length=700), nullable=True),
-    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
-    sa.ForeignKeyConstraint(['instrument_id'], ['instrument.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('music_genre_band',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('music_genre_id', sa.Integer(), nullable=False),
-    sa.Column('band_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
-    sa.ForeignKeyConstraint(['music_genre_id'], ['music_genre.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('music_genre_user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('music_genre_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['music_genre_id'], ['music_genre.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('user_band',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('band_id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -150,6 +127,39 @@ def upgrade():
     sa.ForeignKeyConstraint(['establishment_id'], ['establishment.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('in_demand',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('band_id', sa.Integer(), nullable=False),
+    sa.Column('instrument_id', sa.Integer(), nullable=False),
+    sa.Column('description', sa.String(length=700), nullable=True),
+    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
+    sa.ForeignKeyConstraint(['instrument_id'], ['instrument.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('music_genre_band',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('music_genre_id', sa.Integer(), nullable=False),
+    sa.Column('band_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
+    sa.ForeignKeyConstraint(['music_genre_id'], ['music_genre.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('music_genre_establishment',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('music_genre_id', sa.Integer(), nullable=False),
+    sa.Column('establishment_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['establishment_id'], ['establishment.id'], ),
+    sa.ForeignKeyConstraint(['music_genre_id'], ['music_genre.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user_band',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('band_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['band_id'], ['band.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('forms_in_demand',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('in_demand_id', sa.Integer(), nullable=False),
@@ -159,14 +169,6 @@ def upgrade():
     sa.Column('moreinfo', sa.String(length=700), nullable=True),
     sa.Column('age', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['in_demand_id'], ['in_demand.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_table('music_genre_establishment',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('music_genre_id', sa.Integer(), nullable=False),
-    sa.Column('establishment_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['establishment_id'], ['establishment.id'], ),
-    sa.ForeignKeyConstraint(['music_genre_id'], ['music_genre.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('music_genre_event',
@@ -192,17 +194,17 @@ def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('user_forms_in_demand')
     op.drop_table('music_genre_event')
-    op.drop_table('music_genre_establishment')
     op.drop_table('forms_in_demand')
-    op.drop_table('event')
-    op.drop_table('user_instrument')
     op.drop_table('user_band')
-    op.drop_table('music_genre_user')
+    op.drop_table('music_genre_establishment')
     op.drop_table('music_genre_band')
     op.drop_table('in_demand')
+    op.drop_table('event')
+    op.drop_table('user_instrument')
+    op.drop_table('music_genre_user')
     op.drop_table('establishment')
-    op.drop_table('user')
     op.drop_table('band')
+    op.drop_table('user')
     op.drop_table('city')
     op.drop_table('state')
     op.drop_table('instrument')
